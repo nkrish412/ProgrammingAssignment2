@@ -2,6 +2,8 @@
 ## functions do
 
 ## Write a short comment describing this function
+#This function defines functions to store and retrieve a matrix and its inverse.
+#It is done by using the get and set functions
 
 makeCacheMatrix <- function(x = numeric()) {
     m <- NULL
@@ -21,8 +23,10 @@ makeCacheMatrix <- function(x = numeric()) {
 
 
 ## Write a short comment describing this function
-##The cacheSolve function accepts a matrix as an input, and passes it onto the makecacha 
-## to steo it in casche if present, otherwise it retrieves from cache
+##The cacheSolve function accepts a matrix as an input, and returns the inverse from cache if present 
+## otherwise it calculates the inverse and stores in into the cache. It the matrix is not invertable a
+## an appropriate message is displayed
+
 cacheSolve  <- function(x, ...) {
   m <- x$getinv()
   if(!is.null(m)) {
@@ -30,7 +34,14 @@ cacheSolve  <- function(x, ...) {
     return(m)
   }
   data <- x$get()
-  m <- solve(data)
+
+  m <- try(solve(data),silent=T)
+
+  if (class(m)=="matrix") 
+{
+  message("adding to cache")
   x$setinv(m)
   m
+}
+  else message("Input Matrix cannot be inverted")
 }
